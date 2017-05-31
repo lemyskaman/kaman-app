@@ -1,2 +1,2 @@
 # kaman-app
-A marionette object with some features to construck kaman browser based apps
+A marionette object with some features to build kaman browser based apps
