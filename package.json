@@ -1,0 +1,37 @@
+{
+  "name": "kaman-app",
+  "version": "1.0.0",
+  "description": "A marionette object with some features to build kaman browser based apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lemyskaman/kaman-app.git"
+  },
+  "keywords": [
+    "javascript",
+    "frontend",
+    "ui",
+    "bakcbone",
+    "browser",
+    "based",
+    "app",
+    "marionettejs"
+  ],
+  "author": "lemys lopez <lemyskaman@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/lemyskaman/kaman-app/issues"
+  },
+  "homepage": "https://github.com/lemyskaman/kaman-app#readme",
+  "dependencies": {
+    "backbone": "^1.3.3",
+    "backbone.marionette": "^3.3.1",
+    "backbone.radio": "^2.0.0",
+    "kaman-core": "^1.0.0",
+    "kaman-ui": "^1.0.0",
+    "underscore": "^1.8.3"
+  }
+}
