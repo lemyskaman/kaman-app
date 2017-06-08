@@ -14,33 +14,21 @@ var Kapp = Mn.Application.extend({
     name: 'Kaman App',
     channelName: 'KamanApp',
     region: '#root',
-    radioRequests:{
-        'interface:set':'set_interface'
-    },
+
     ui: kamanUi,
     interface: new kamanUi.Object({
         
         name: 'KamanApp UI',
+        langSource:this.langSource,
         appChannel: 'KamanApp'
     }),
-    radioRequests: {
-
-        'alertmsg': function () { console.log('hello') },
-        'set:mainView': 'set_mainView',
-        'show:mainView': 'show_mainView'
-    },
-    events: {
-        'test': function () { console.log('lemys') }
-    },
-    set_ui: function () {
-        var _that = this;
-    },
 
     kamanInit: function () {
       
         return kamanFunctions.omitBackboneOptsAsProps(this)
     },
     initialize: function () {
+        console.log('langsource',this.getOption('langSource'))
         this.kamanInit()
             .then(function () {
                 if (config.get('debug'))
