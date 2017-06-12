@@ -7,20 +7,27 @@ var KamanUi = require('kaman-ui');
 
 
 var kamanFunctions = kamanCore.Functions
-var config = radio.channel('KamanApp').request('config');
+var config = radio.channel('kaman:app').request('config');
 //var interface=require('kaman-ui')
 
 
 
 
 var Kapp = Mn.Application.extend({
-    name: 'Kaman App',
-    channelName: 'KamanApp',
+
+    channelName: 'kaman:app',
     region: '#root',
 
 
+    radioRequests:{
+      'module:show':'moduleShow'
+    },
+    moduleShow:function(data){
+      console.log('module to show '+data.get('action'));
 
-
+      
+      data.set({status:true})
+    },
     kamanInit: function () {
 
         this.mergeOptions(this.options,_.keys(this.options));
@@ -39,7 +46,7 @@ var Kapp = Mn.Application.extend({
 
             name: 'KamanApp UI',
             langSource: this.langSource,
-            appChannel: 'KamanApp'
+            appChannel: this.getChannel()//we pass the appchanel to use
         });
 
         if (!_.isElement($(this.region)[0])) {
