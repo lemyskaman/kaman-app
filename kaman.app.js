@@ -1,4 +1,3 @@
-
 var Promise = require('bluebird')
 var radio = require('backbone.radio')
 var Mn = require('backbone.marionette');
@@ -7,7 +6,7 @@ var KamanUi = require('kaman-ui');
 
 
 var kamanFunctions = kamanCore.Functions
-var config = radio.channel('kaman:app').request('config');
+
 //var interface=require('kaman-ui')
 
 
@@ -19,41 +18,61 @@ var Kapp = Mn.Application.extend({
     region: '#root',
 
     ui: {},
+    radioEvents:{
+        'notify':'notify'
+        
+    },
     radioRequests: {
         'module:show': 'moduleShow',
         'modules':function(){return this.modules}
 
     },
-    moduleShow: function (data) {
-        console.log('module to show ' + data.get('name'));
+    notify:function(message,type){
+        switch (type) {
+            case "warning":  
+                console.warn(message)
 
+                break;
+            case "danger":
+                console.error(message)
+                break;
+            default:
+                console.info(message)
+                break;
+        }
+    },
+
+    moduleShow: function (name) {
+    
         //console.log(new _.findWhere(this.modules,{name:data.get('name')}).MainView())
         //with underscore first we search for a module with the proper name and then
         // we get its view constructor and build a view and pass a parameter 
-        //this.region.showChildView('page',new _.findWhere(this.modules,{name:data.get('name')}).MainView())
+        //this.region.showChildView('|page',new _.findWhere(this.modules,{name:data.get('name')}).MainView())
 
-
+        console.log("name: "+name)
 
 
         //we get the view constructor from the passed module array using the name from the data of  the clicked menu item
-        var ModuleView = _.findWhere(this.modules, { name: data.get('name') }).View.extend({})
+        //var ModuleView = _.findWhere(this.modules, { name: data.get('name') }).View.extend({})
+
+        var ModuleView = _.findWhere(this.modules, { name: name }).View.extend({})
 
 
-
-        //we get the name of the place to load modules 
-        var modulesDisplayRegionName = radio.channel('kaman:ui').request('modules:display:region_name')
-        console.log(modulesDisplayRegionName);
-        //the we render the new module view
-        console.log(this.getRegion())
+        console.log("ModuleView:",ModuleView)
         //todo: this is by now the most elegant way i figured out to load the module view
         //it work accesing to the root view  
         //this.getRegion().currentView
-        this.getView() 
-            .renderContent(ModuleView, function () { console.log('rendered') })
-        // this.region.showChildView('page', new Backbone.View({ initialize: function () { console.log('backboneview rendereds') } }))
+        if (this.getView() 
+            .renderContent(new ModuleView())){
+                return true
+            }else{
+                return false
+            }
+        
+            // this.region.showChildView('page', new Backbone.View({ initialize: function () { console.log('backboneview rendereds') } }))
 
         //setting the displayed flag on module data
-        data.set({ status: true })
+        
     },
     getCurrentModuleView:function(){
         return this.getRegion.currentView
@@ -68,15 +87,16 @@ var Kapp = Mn.Application.extend({
             return _.pick(v, 'caption', 'name', 'icon')
         });
     },
+    
     initialize: function () {
         this.kamanInit()
         console.log('kamanapp insTance ', this)
-        if (config.get('debug'))
-            console.log('kamanApp name: ' + config.get('name')
+        if (this.config.get('debug'))
+            console.log('kamanApp name: ' + this.config.get('name')
                 + '\nwas initialized, and will be rendered on '
-                + config.get('nodeSelector'))
+                + this.config.get('nodeSelector'))
 
-        this.region = config.get('nodeSelector');
+        this.region = this.config.get('nodeSelector');
 
         this.ui = new this.Ui({
 
@@ -98,13 +118,13 @@ var Kapp = Mn.Application.extend({
         //Backbone.Radio.channel('kaman:ui').request('menu:build')
 
         if (!_.isElement($(this.region)[0])) {
-            console.warn('kamanApp: ' + config.get('name') + '\nit seams that ' + config.get('nodeSelector') + ' is not a DOM element')
+            console.warn('kamanApp: ' + this.config.get('name') + '\nit seams that ' + this.config.get('nodeSelector') + ' is not a DOM element')
         }
         //this.interface.set_mainView()
     },
 
     onStart: function () {
-        if (config.get('debug'))
+        if (this.config.get('debug'))
             console.log('kamanApp: ' + this.name + '\nstarting')
 
 
